@@ -9,7 +9,7 @@ header{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0 1px 0 var(-
 .hd{display:flex;align-items:center;gap:18px;height:74px}
 .lg img{height:50px;display:block}
 .sf{flex:1;display:flex;max-width:640px;margin:0 auto}
-.sf input{flex:1;min-width:0;border:2px solid var(--blue);border-right:0;border-radius:8px 0 0 8px;padding:11px 14px;font:inherit}
+.sf input{flex:1;min-width:0;margin:0;border:2px solid var(--blue);border-right:0;border-radius:8px 0 0 8px;padding:11px 14px;font:inherit}
 .sf input:focus{outline:0}
 .sf button{background:var(--blue);color:#fff;border:0;border-radius:0 8px 8px 0;padding:0 18px}
 .ib{display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--ink);font-weight:600;font-size:14px;position:relative}

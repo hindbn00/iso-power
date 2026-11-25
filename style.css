@@ -53,7 +53,7 @@ nav{background:var(--blue)}
 .cb{padding:14px;display:flex;flex-direction:column;gap:4px;flex:1}
 .cb small{color:var(--mut);font-size:12.5px}.cb h3{margin:0;font-size:15px;line-height:1.35}.cb h3 a:hover{color:var(--blue)}
 .pr{font-weight:800;color:var(--navy);margin-top:4px}.pr.q{font-weight:600;color:var(--mut);font-size:13.5px}
-.cb .btn{margin-top:auto;padding:10px;font-size:14px}.cb .btn{margin-top:10px}
+.cb .btn{margin-top:auto;padding:10px;font-size:14px}.cb .pr{margin-bottom:12px}
 .shop{display:grid;grid-template-columns:260px 1fr;gap:22px;margin:22px 0}
 .side{background:#fff;border:1px solid var(--line);border-radius:10px;align-self:start;overflow:hidden}
 .side h4{margin:0;background:var(--blue);color:#fff;padding:12px 16px;font-size:15px}

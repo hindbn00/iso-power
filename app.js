@@ -8,7 +8,7 @@ const slug=(c,s)=>'#/shop/'+c+(s!=null?'/'+s:'');
 const img=p=>p.img?`<img src="${p.img}" alt="${p.n}">`:`<img class="pl" src="assets/logo.png" alt="">`;
 const price=p=>p.p!=null?`<div class="pr">${fmt(p.p)}</div>`:`<div class="pr q">Prix sur demande</div>`;
 const card=p=>`<div class="card">${p.t?`<span class="bd ${p.t=='Populaire'?'pop':''}">${p.t}</span>`:''}<a class="ph" href="#/p/${p.id}">${img(p)}</a><div class="cb"><small>${C[p.c][0]} · Réf. ${p.ref}</small><h3><a href="#/p/${p.id}">${p.n}</a></h3>${price(p)}<button class="btn dk" onclick="add(${p.id})">Ajouter au panier</button></div></div>`;
-const menu=()=>{$('#menu').innerHTML='<li><a href="#/shop">Tout le catalogue</a></li>'+C.map((c,i)=>`<li><a href="${slug(i)}">${c[0]}</a><div class="dd">${c[1].map((s,j)=>`<a href="${slug(i,j)}">${s}</a>`).join('')}</div></li>`).join('')};
+const menu=()=>{$('#menu').innerHTML='<li><a href="#/shop">Tout le catalogue</a></li>'+C.map((c,i)=>`<li class="hs"><a href="${slug(i)}">${c[0]}</a><div class="dd"><a class="mo" href="${slug(i)}">Voir toute la catégorie</a>${c[1].map((s,j)=>`<a href="${slug(i,j)}">${s}</a>`).join('')}</div></li>`).join('')};
 const R={
 home(){const nw=P.filter(p=>p.t=='Nouveau'),pp=P.filter(p=>p.t=='Populaire');
 return `<div class="w"><div class="hero"><div><small>Industrial Solutions</small><h1>Votre boutique en ligne de matériel électrique et pneumatique industriel</h1><p>Automatisme, départ moteur, distribution d’énergie, câbles et composants pneumatiques, livrés partout en Algérie.</p><a class="btn" href="#/shop">Explorer le catalogue</a><a class="btn ol" href="#/devis">Demander un devis</a></div><video autoplay muted loop playsinline poster="assets/poster-blue.jpg"><source src="assets/intro-blue.mp4" type="video/mp4"></video></div>
@@ -43,5 +43,6 @@ $('#nav').classList.remove('open');if(!window._keep)window.scrollTo(0,0);
 const ck=$('#ck');if(ck)ck.onsubmit=e=>{e.preventDefault();const f=ck,l=Object.keys(cart).map(i=>'- '+cart[i]+' x '+P[i].n+' (Réf. '+P[i].ref+')').join('\n');mail('Commande – '+f.n.value,'Nom : '+f.n.value+'\nTéléphone : '+f.t.value+'\nWilaya : '+f.w.value+'\nCommune : '+f.c.value+'\nAdresse : '+f.a.value+'\n\nCommande :\n'+l+'\n\nRemarques : '+f.r.value+'\nPaiement à la livraison.');cart={};save()};
 const dv=$('#dv');if(dv)dv.onsubmit=e=>{e.preventDefault();mail('Demande de devis – '+dv.n.value,'Nom / Société : '+dv.n.value+'\nTéléphone : '+dv.t.value+'\nE-mail : '+dv.e.value+'\n\n'+dv.m.value)}}
 $('#sf').onsubmit=e=>{e.preventDefault();const v=$('#q').value.trim();if(v)location.hash='#/search/'+encodeURIComponent(v)};
+$('#menu').addEventListener('click',e=>{const k=e.target.closest('#menu>li>a');if(k&&matchMedia('(max-width:820px)').matches&&k.parentElement.classList.contains('hs')){e.preventDefault();const li=k.parentElement,w=li.classList.contains('open');document.querySelectorAll('#menu>li.open').forEach(x=>x.classList.remove('open'));if(!w)li.classList.add('open')}});
 $('#mb').onclick=()=>$('#nav').classList.toggle('open');
 addEventListener('hashchange',route);menu();save();route();

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISO POWER – Distributeur de matériel électrique & pneumatique industriel</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#0f1b2d;--mut:#5b6678;--brand:#f5b800;--navy:#0b1b33;--line:#e2e6ec;--on-navy:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a121f;--card:#111d30;--ink:#eef2f8;--mut:#9aa7ba;--line:#22314a;--navy:#060d19;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a121f;--card:#111d30;--ink:#eef2f8;--mut:#9aa7ba;--line:#22314a;--navy:#060d19;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+a{color:inherit;text-decoration:none}
+.w{max-width:1180px;margin:auto;padding:0 18px}
+.top{background:var(--navy);color:var(--on-navy);font-size:13px}
+.top .w{display:flex;justify-content:space-between;gap:12px;padding:8px 18px;flex-wrap:wrap}
+header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.hd{display:flex;align-items:center;gap:16px;padding:12px 18px}
+.logo{font-weight:900;font-size:26px;letter-spacing:1px}
+.logo b{background:var(--brand);color:#0b1b33;padding:0 8px;border-radius:6px;margin-left:4px}
+.search{flex:1;display:flex;min-width:0}
+.search input{flex:1;min-width:0;padding:11px 14px;border:1px solid var(--line);border-radius:8px 0 0 8px;background:var(--bg);color:var(--ink);font-size:15px}
+.search button,.btn{background:var(--brand);color:#0b1b33;border:0;font-weight:700;padding:11px 18px;cursor:pointer;border-radius:8px;font-size:15px}
+.search button{border-radius:0 8px 8px 0}
+.cart{white-space:nowrap;font-weight:600}
+.cart span{background:var(--brand);color:#0b1b33;border-radius:99px;padding:1px 8px;margin-left:4px;font-size:13px}
+nav{background:var(--navy)}
+nav .w{display:flex;gap:4px;overflow-x:auto}
+nav a{color:var(--on-navy);padding:12px 14px;font-size:14px;white-space:nowrap}
+nav a:hover{color:var(--brand)}
+.hero{background:linear-gradient(120deg,var(--navy),#16355f);color:#fff;padding:64px 0}
+.hero .w{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(30px,5vw,50px);line-height:1.1;margin:0 0 14px}
+.hero h1 em{color:var(--brand);font-style:normal}
+.hero p{color:#c9d4e6;max-width:520px}
+.hero .btn+.btn{background:transparent;color:#fff;border:2px solid #fff;margin-left:8px}
+.bolt{font-size:150px;text-align:center;color:var(--brand);filter:drop-shadow(0 0 30px rgba(245,184,0,.5))}
+.perks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:-28px auto 0;position:relative}
+.perk{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:center}
+.perk i{font-style:normal;font-size:26px}
+.perk small{display:block;color:var(--mut)}
+section{padding:48px 0}
+h2{font-size:28px;margin:0 0 6px}
+.sub{color:var(--mut);margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;transition:.2s}
+.cat:hover{border-color:var(--brand);transform:translateY(-3px)}
+.cat i{font-style:normal;font-size:34px;display:block;margin-bottom:8px}
+.cat h3{margin:0 0 6px;font-size:17px}
+.cat p{margin:0;color:var(--mut);font-size:14px}
+.prod{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.pimg{height:130px;background:linear-gradient(135deg,var(--line),var(--bg));display:grid;place-items:center;font-size:48px;position:relative}
+.tag{position:absolute;top:10px;left:10px;background:var(--brand);color:#0b1b33;font-size:12px;font-weight:800;padding:2px 9px;border-radius:99px}
+.pb{padding:14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pb small{color:var(--mut)}
+.pb h3{margin:0;font-size:16px}
+.pb .btn{margin-top:auto;padding:9px;font-size:14px}
+.about{background:var(--card);border-block:1px solid var(--line)}
+.about .w{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{background:var(--bg);border-radius:12px;padding:18px;text-align:center}
+.stat b{display:block;font-size:30px;color:var(--brand)}
+.brands{display:flex;flex-wrap:wrap;gap:12px}
+.brands span{flex:1 1 140px;text-align:center;padding:18px;background:var(--card);border:1px dashed var(--line);border-radius:10px;font-weight:700;color:var(--mut)}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+.box p{margin:6px 0}
+.box input,.box textarea{width:100%;margin:5px 0;padding:11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+footer{background:var(--navy);color:#9fb0c8;text-align:center;padding:22px 18px;font-size:14px}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 20px;border-radius:99px;display:none;z-index:9}
+@media(max-width:760px){.hero .w,.about .w,.contact{grid-template-columns:1fr}.bolt{font-size:80px}.hd{flex-wrap:wrap}.search{order:3;flex-basis:100%}}
+</style>
+</head>
+<body>
+<div class="top"><div class="w"><span>📞 +213 XX XX XX XX · ✉ contact@iso-power.dz</span><span>Dim – Jeu · 8h30 – 17h</span></div></div>
+<header><div class="w hd">
+<a class="logo" href="#">ISO<b>POWER</b></a>
+<form class="search" onsubmit="return false"><input id="q" placeholder="Rechercher un produit, une référence…"><button onclick="toast('Recherche : '+document.getElementById('q').value)">Chercher</button></form>
+<a class="cart" href="#contact">Demande de devis<span id="n">0</span></a>
+</div>
+<nav><div class="w"><a href="#cats">Automatisme</a><a href="#cats">Départ moteur</a><a href="#cats">Distribution d’énergie</a><a href="#cats">Câblage & outillage</a><a href="#cats">Élec bâtiment</a><a href="#cats">Câbles</a><a href="#cats">Pneumatique</a><a href="#cats">Mesure</a></div></nav></header>
+
+<div class="hero"><div class="w"><div>
+<h1>Le matériel électrique & pneumatique <em>industriel</em> à portée de clic</h1>
+<p>ISO POWER distribue les plus grandes marques d’automatisme, de distribution d’énergie et de composants pneumatiques pour tous types d’industries en Algérie.</p>
+<a class="btn" href="#produits">Voir les produits</a><a class="btn" href="#contact">Demander un devis</a></div>
+<div class="bolt">⚡</div></div></div>
+
+<div class="w perks">
+<div class="perk"><i>🚚</i><div><b>Livraison rapide</b><small>Partout en Algérie</small></div></div>
+<div class="perk"><i>💵</i><div><b>Paiement à la livraison</b><small>Simple et sécurisé</small></div></div>
+<div class="perk"><i>✅</i><div><b>Marques d’origine</b><small>Produits 100 % garantis</small></div></div>
+<div class="perk"><i>🛠</i><div><b>Conseil technique</b><small>Équipe à votre écoute</small></div></div>
+</div>
+
+<section id="cats"><div class="w"><h2>Nos catégories</h2><p class="sub">Une large gamme de références pour répondre à vos besoins industriels.</p>
+<div class="grid">
+<a class="cat" href="#contact"><i>🤖</i><h3>Automatisme & contrôle industriel</h3><p>Automates, écrans HMI, détecteurs, relais, alimentations.</p></a>
+<a class="cat" href="#contact"><i>⚙️</i><h3>Départ moteur</h3><p>Contacteurs, variateurs, démarreurs progressifs, disjoncteurs moteur.</p></a>
+<a class="cat" href="#contact"><i>🔌</i><h3>Distribution d’énergie</h3><p>Disjoncteurs, coffrets, armoires, sectionneurs, transformateurs.</p></a>
+<a class="cat" href="#contact"><i>🧰</i><h3>Connectique & outillage</h3><p>Bornes, cosses, goulottes, pinces à sertir, marquage.</p></a>
+<a class="cat" href="#contact"><i>🏢</i><h3>Élec bâtiment & tertiaire</h3><p>Appareillage, éclairage, protection domestique, conduits.</p></a>
+<a class="cat" href="#contact"><i>🧵</i><h3>Câbles de puissance</h3><p>Câbles souples, blindés, anti-feu, réseau et instrumentation.</p></a>
+<a class="cat" href="#contact"><i>💨</i><h3>Composants pneumatiques</h3><p>Vérins, distributeurs, électrovannes, raccords, traitement d’air.</p></a>
+<a class="cat" href="#contact"><i>🌡️</i><h3>Pression, niveau & température</h3><p>Manomètres, capteurs, sondes, contrôleurs de niveau et de débit.</p></a>
+</div></div></section>
+
+<section id="produits" style="padding-top:0"><div class="w"><h2>Produits phares</h2><p class="sub">Une sélection de références très demandées. Prix sur demande.</p>
+<div class="grid" id="pg"></div></div></section>
+
+<section class="about"><div class="w"><div>
+<h2>À propos d’ISO POWER</h2>
+<p>ISO POWER est un distributeur de matériel électrique et pneumatique industriel. Nous accompagnons les industriels, installateurs et bureaux d’études avec des produits de marque d’origine, un conseil technique fiable et des délais maîtrisés.</p>
+<p>[Votre histoire, année de création et valeurs à personnaliser ici.]</p></div>
+<div class="stats"><div class="stat"><b>3000+</b>Références</div><div class="stat"><b>10+</b>Marques partenaires</div><div class="stat"><b>58</b>Wilayas livrées</div><div class="stat"><b>24h</b>Réponse aux devis</div></div></div></section>
+
+<section><div class="w"><h2>Nos partenaires</h2><p class="sub">Les marques leaders que nous distribuons.</p>
+<div class="brands"><span>Marque 1</span><span>Marque 2</span><span>Marque 3</span><span>Marque 4</span><span>Marque 5</span><span>Marque 6</span></div></div></section>
+
+<section id="contact" style="padding-top:0"><div class="w"><h2>Contact & devis</h2><p class="sub">Envoyez-nous votre besoin, nous revenons vers vous rapidement.</p>
+<div class="contact"><div class="box"><b>Coordonnées</b>
+<p>📍 Adresse : [à compléter], Alger</p><p>📞 +213 XX XX XX XX</p><p>✉ contact@iso-power.dz</p><p>🕒 Dimanche – Jeudi : 8h30 – 17h</p></div>
+<form class="box" onsubmit="event.preventDefault();toast('Merci ! Votre demande a été envoyée.');this.reset()">
+<input required placeholder="Nom / Société"><input required placeholder="Téléphone"><input type="email" placeholder="Email">
+<textarea rows="4" required placeholder="Références ou produits recherchés…"></textarea><button class="btn" style="width:100%">Envoyer la demande</button></form></div></div></section>
+
+<footer>© 2026 ISO POWER – Tous droits réservés.</footer>
+<div id="toast"></div>
+<script>
+const P=[["Automate","Automate programmable S7-1200","Réf. à définir","🤖","Nouveau"],["Variateur","Variateur de vitesse ATV320","Réf. à définir","⚙️","Chaud"],["Contacteur","Contacteur TeSys 3P 9–38A","Réf. à définir","🔌","Chaud"],["Disjoncteur","Disjoncteur compact NSX 160A","Réf. à définir","⚡","Chaud"],["Coffret","Coffret métallique 600×400×200","Réf. à définir","🗄️","Promo"],["Pneumatique","Vérin ISO cylindrique","Réf. à définir","💨","Nouveau"]];
+let c=0;const g=document.getElementById('pg');
+P.forEach(p=>{const d=document.createElement('div');d.className='prod';d.innerHTML='<div class="pimg"><span class="tag">'+p[4]+'</span>'+p[3]+'</div><div class="pb"><small>'+p[0]+' · '+p[2]+'</small><h3>'+p[1]+'</h3><small>Prix sur demande</small><button class="btn">Ajouter au devis</button></div>';
+d.querySelector('button').onclick=()=>{document.getElementById('n').textContent=++c;toast('Ajouté : '+p[1])};g.appendChild(d)});
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2200)}
+</script>
+</body>
+</html>

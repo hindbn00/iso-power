@@ -17,9 +17,9 @@ header{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0 1px 0 var(-
 .ct b{background:var(--gold);color:#16213a;border-radius:99px;font-size:12px;min-width:20px;height:20px;display:grid;place-items:center;padding:0 5px}
 .mb{display:none}
 nav{background:var(--blue)}
-#menu{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center}
+#menu{list-style:none;margin:0;padding:0;display:flex;flex-wrap:nowrap;justify-content:center}nav .w{max-width:1440px;padding:0 8px}
 #menu>li{position:relative}
-#menu>li>a{display:block;color:#fff;padding:12px 11px;font-size:13.5px;font-weight:600;white-space:nowrap}
+#menu>li>a{display:block;color:#fff;padding:12px clamp(6px,.8vw,11px);font-size:clamp(11.5px,1.02vw,13.5px);font-weight:600;white-space:nowrap}
 #menu>li:hover>a{background:var(--navy)}
 .dd{display:none;position:absolute;top:100%;left:0;min-width:250px;background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);box-shadow:0 14px 34px rgba(15,42,82,.18);z-index:40}
 #menu>li:hover .dd{display:block}#menu>li:nth-last-child(-n+2) .dd{left:auto;right:0}

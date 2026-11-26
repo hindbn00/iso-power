@@ -183,14 +183,14 @@ async function vProducts(){
   $('#fc').onchange=e=>{S.pc=e.target.value;S.page=1;S.sel.clear();drawProducts()};
   $('#fv').onchange=e=>{S.pv=e.target.value;S.page=1;S.sel.clear();drawProducts()};
   $('#add').onclick=()=>productDlg();
-  $('#dl').onclick=()=>csv('produits',['Référence','Nom','Catégorie','Sous-catégorie','Marque','Prix (DA)','Badge','Visible','Description','Image','Ajouté le'],productsFiltered().map(p=>[p.ref,p.name,p.category,p.subcategory,p.brand,p.price==null?'Sur demande':Number(p.price),p.badge,p.visible?'Oui':'Non',p.description,p.image_url,fdate(p.created_at)]));
+  $('#dl').onclick=()=>csv('produits',['Référence','Nom','Catégorie','Sous-catégorie','Marque','Prix (DA)','Nouveauté (accueil)','Populaire (accueil)','Visible','Description','Image','Ajouté le'],productsFiltered().map(p=>[p.ref,p.name,p.category,p.subcategory,p.brand,p.price==null?'Sur demande':Number(p.price),p.is_new?'Oui':'Non',p.is_popular?'Oui':'Non',p.visible?'Oui':'Non',p.description,p.image_url,fdate(p.created_at)]));
   drawProducts();
 }
 function productsFiltered(){const q=S.ps.trim().toLowerCase();return S.products.filter(p=>(!S.pc||p.category==S.pc)&&(S.pv==''||(S.pv=='1')==p.visible)&&(!q||(p.name+' '+p.ref+' '+(p.brand||'')).toLowerCase().includes(q)))}
 function drawProducts(){
   const L=productsFiltered(),per=50,pages=Math.max(1,Math.ceil(L.length/per));S.page=Math.min(S.page,pages);
   const rows=L.slice((S.page-1)*per,S.page*per);
-  $('#tb').innerHTML=rows.length?`<table><thead><tr><th><input type="checkbox" id="ca" aria-label="Tout sélectionner"></th><th></th><th>Référence</th><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Visible</th><th></th></tr></thead><tbody>${rows.map(p=>`<tr><td><input type="checkbox" class="rc" data-id="${p.id}" ${S.sel.has(p.id)?'checked':''} aria-label="Sélectionner ${esc(p.ref)}"></td><td>${p.image_url?`<img class="th" src="${esc(p.image_url)}" alt="" loading="lazy">`:'<img class="th pl" src="assets/logo.png" alt="">'}</td><td><b>${esc(p.ref)}</b></td><td>${esc(p.name)}${p.badge?`<span class="pill ${p.badge=='Populaire'?'pop':''}">${p.badge}</span>`:''}${p.brand?`<small>${esc(p.brand)}</small>`:''}</td><td>${esc(p.category)}<small>${esc(p.subcategory)}</small></td><td class="num">${DA(p.price)}</td><td><label class="sw" title="${p.visible?'Visible sur la boutique':'Masqué'}"><input type="checkbox" class="vz" data-id="${p.id}" ${p.visible?'checked':''} aria-label="Visible sur la boutique"><i></i></label></td><td class="act"><button class="btn sm" data-e="${p.id}">Modifier</button> <button class="btn sm dng" data-d="${p.id}">Supprimer</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Aucun produit. Utilisez « Ajouter un produit ».</div>';
+  $('#tb').innerHTML=rows.length?`<table><thead><tr><th><input type="checkbox" id="ca" aria-label="Tout sélectionner"></th><th></th><th>Référence</th><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Visible</th><th></th></tr></thead><tbody>${rows.map(p=>`<tr><td><input type="checkbox" class="rc" data-id="${p.id}" ${S.sel.has(p.id)?'checked':''} aria-label="Sélectionner ${esc(p.ref)}"></td><td>${p.image_url?`<img class="th" src="${esc(p.image_url)}" alt="" loading="lazy">`:'<img class="th pl" src="assets/logo.png" alt="">'}</td><td><b>${esc(p.ref)}</b></td><td>${esc(p.name)}${p.is_new?'<span class="pill">Nouveau</span>':''}${p.is_popular?'<span class="pill pop">Populaire</span>':''}${p.brand?`<small>${esc(p.brand)}</small>`:''}</td><td>${esc(p.category)}<small>${esc(p.subcategory)}</small></td><td class="num">${DA(p.price)}</td><td><label class="sw" title="${p.visible?'Visible sur la boutique':'Masqué'}"><input type="checkbox" class="vz" data-id="${p.id}" ${p.visible?'checked':''} aria-label="Visible sur la boutique"><i></i></label></td><td class="act"><button class="btn sm" data-e="${p.id}">Modifier</button> <button class="btn sm dng" data-d="${p.id}">Supprimer</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Aucun produit. Utilisez « Ajouter un produit ».</div>';
   $('#pg').innerHTML=`${L.length} produit(s)${pages>1?` · <button class="btn sm" id="pp" ${S.page<=1?'disabled':''}>Précédent</button> page ${S.page}/${pages} <button class="btn sm" id="pn" ${S.page>=pages?'disabled':''}>Suivant</button>`:''}`;
   if(pages>1){$('#pp').onclick=()=>{S.page--;drawProducts()};$('#pn').onclick=()=>{S.page++;drawProducts()}}
   bulkProducts();
@@ -202,9 +202,11 @@ function drawProducts(){
 }
 function bulkProducts(){
   const n=S.sel.size,b=$('#bk');
-  b.innerHTML=n?`<div class="bulk"><b>${n} sélectionné(s)</b><button class="btn sm" id="bh">Masquer</button><button class="btn sm" id="bsw">Afficher</button><button class="btn sm dng" id="bd">Supprimer</button></div>`:'';
+  b.innerHTML=n?`<div class="bulk"><b>${n} sélectionné(s)</b><button class="btn sm" id="bh">Masquer</button><button class="btn sm" id="bsw">Afficher</button><button class="btn sm" id="bn">Mettre en Nouveautés</button><button class="btn sm" id="bp">Mettre en Populaires</button><button class="btn sm" id="bx">Retirer de l’accueil</button><button class="btn sm dng" id="bd">Supprimer</button></div>`:'';
   if(!n)return;
   const vis=async v=>{const{error}=await sb.from('products').update({visible:v}).in('id',[...S.sel]);if(error)return fail(error);S.products.forEach(p=>{if(S.sel.has(p.id))p.visible=v});toast(v?'Produits affichés':'Produits masqués');S.sel.clear();drawProducts()};
+  const fl=async(o,m)=>{const{error}=await sb.from('products').update(o).in('id',[...S.sel]);if(error)return fail(error);S.products.forEach(p=>{if(S.sel.has(p.id))Object.assign(p,o)});toast(m);S.sel.clear();drawProducts()};
+  $('#bn').onclick=()=>fl({is_new:true},'Ajoutés aux Nouveautés');$('#bp').onclick=()=>fl({is_popular:true},'Ajoutés aux Produits populaires');$('#bx').onclick=()=>fl({is_new:false,is_popular:false},'Retirés de l’accueil');
   $('#bh').onclick=()=>vis(false);$('#bsw').onclick=()=>vis(true);$('#bd').onclick=()=>delProducts([...S.sel]);
 }
 async function delProducts(ids){
@@ -227,7 +229,7 @@ function productDlg(id){
   <label>Marque (facultatif)<input name="brand" maxlength="80" value="${esc(p?p.brand:'')}" placeholder="Schneider, ABB…"></label></div>
   <label>Nom du produit<input name="name" required minlength="2" maxlength="200" value="${esc(p?p.name:'')}"></label>
   <div class="f2"><label>Prix en DA (facultatif)<input name="price" type="number" min="0" step="1" inputmode="numeric" value="${p&&p.price!=null?Number(p.price):''}"><span class="hint">Laisser vide = « Prix sur demande ».</span></label>
-  <label>Badge<select name="badge"><option value="">Aucun</option><option ${p&&p.badge=='Nouveau'?'selected':''}>Nouveau</option><option ${p&&p.badge=='Populaire'?'selected':''}>Populaire</option></select></label></div>
+  <div class="hp"><b>Page d’accueil</b><label class="chk"><input type="checkbox" name="is_new" ${p&&p.is_new?'checked':''}> Afficher dans « Nouveautés »</label><label class="chk"><input type="checkbox" name="is_popular" ${p&&p.is_popular?'checked':''}> Afficher dans « Produits populaires »</label></div></div>
   <label>Description (facultatif)<textarea name="description" rows="4" maxlength="3000">${esc(p?p.description:'')}</textarea></label>
   <div><label>Photo<input type="file" id="pfile" accept="image/jpeg,image/png,image/webp"></label><div class="pv" style="margin-top:8px" id="pvw">${p&&p.image_url?`<img src="${esc(p.image_url)}" alt=""><button type="button" class="btn sm dng" id="prm">Retirer la photo</button>`:''}</div></div>
   <label class="chk"><input type="checkbox" name="visible" ${!p||p.visible?'checked':''}> Visible sur la boutique</label></div>
@@ -245,7 +247,7 @@ function productDlg(id){
       if(newFile){const path='p-'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.jpg';
         const up=await sb.storage.from('product-images').upload(path,newFile,{contentType:'image/jpeg',cacheControl:'31536000'});if(up.error)throw up.error;
         url=sb.storage.from('product-images').getPublicUrl(path).data.publicUrl}
-      const row={ref:f.ref.value.trim(),name:f.name.value.trim(),category:f.category.value,subcategory:f.subcategory.value,brand:f.brand.value.trim()||null,description:f.description.value.trim()||null,price:f.price.value===''?null:Number(f.price.value),badge:f.badge.value||null,visible:f.visible.checked,image_url:url};
+      const row={ref:f.ref.value.trim(),name:f.name.value.trim(),category:f.category.value,subcategory:f.subcategory.value,brand:f.brand.value.trim()||null,description:f.description.value.trim()||null,price:f.price.value===''?null:Number(f.price.value),is_new:f.is_new.checked,is_popular:f.is_popular.checked,visible:f.visible.checked,image_url:url};
       const q=p?sb.from('products').update(row).eq('id',p.id).select().single():sb.from('products').insert(row).select().single();
       const{data,error}=await q;
       if(error){if(newFile&&url)sb.storage.from('product-images').remove([IMG_PATH(url)]).then(()=>{},()=>{});throw error}

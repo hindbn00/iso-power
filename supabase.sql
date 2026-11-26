@@ -31,11 +31,21 @@ create table if not exists public.products (
   description text,
   price       numeric(12,2) check (price is null or price >= 0),  -- null = prix sur demande
   image_url   text,
-  badge       text check (badge in ('Nouveau','Populaire')),
+  is_new      boolean not null default false,   -- affiché dans « Nouveautés » (accueil)
+  is_popular  boolean not null default false,   -- affiché dans « Produits populaires » (accueil)
   visible     boolean not null default true,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );
+-- Mise à jour d'une ancienne version (colonne « badge ») : sans effet sur une nouvelle installation
+alter table public.products add column if not exists is_new boolean not null default false;
+alter table public.products add column if not exists is_popular boolean not null default false;
+do $$ begin
+  if exists (select 1 from information_schema.columns where table_schema='public' and table_name='products' and column_name='badge') then
+    update public.products set is_new = (badge = 'Nouveau'), is_popular = (badge = 'Populaire') where badge is not null;
+    alter table public.products drop column badge;
+  end if;
+end $$;
 create index if not exists products_visible_idx on public.products (visible);
 
 create or replace function public.touch_updated_at()
@@ -254,35 +264,28 @@ create policy "admin supprime photos" on storage.objects
 -- c) Supabase > Authentication > Sign In / Providers : désactivez
 --    "Allow new users to sign up" (personne d'autre ne peut créer de compte).
 
+-- 8b) DROITS D'ACCÈS (obligatoires sur les nouveaux projets Supabase) ----
+-- La sécurité fine (qui voit quoi) reste gérée par les policies RLS ci-dessus.
+grant usage on schema public to anon, authenticated;
+
+grant select on public.products to anon, authenticated;
+grant insert, update, delete on public.products to authenticated;
+
+grant insert on public.orders, public.quotes, public.visits to anon, authenticated;
+grant select, update, delete on public.orders, public.quotes to authenticated;
+grant select, delete on public.visits to authenticated;
+
+grant select on public.admins to authenticated;
+grant execute on function public.is_admin() to anon, authenticated;
+
 -- 9) PRODUITS DE DÉPART (ceux de data.js) -------------------------------
-insert into public.products (ref, name, category, subcategory, price, badge) values
-('ISO-1001', 'Automate programmable compact 24 E/S', 'Automatisme et contrôle', 'Automates programmables', null, 'Nouveau'),
-('ISO-1002', 'Écran tactile HMI 7 pouces', 'Automatisme et contrôle', 'Écrans HMI', null, null),
-('ISO-1003', 'Détecteur inductif M18 PNP', 'Automatisme et contrôle', 'Capteurs et détecteurs', null, null),
-('ISO-1004', 'Relais temporisé multifonction', 'Automatisme et contrôle', 'Relais', null, null),
-('ISO-1005', 'Alimentation 24 V DC 10 A', 'Automatisme et contrôle', 'Alimentations', null, 'Nouveau'),
-('ISO-1006', 'Contacteur tripolaire 9 A, bobine 230 V AC', 'Départ moteur', 'Contacteurs', null, 'Populaire'),
-('ISO-1007', 'Variateur de vitesse triphasé 0,75 kW', 'Départ moteur', 'Variateurs de vitesse', null, 'Populaire'),
-('ISO-1008', 'Démarreur progressif 22 kW', 'Départ moteur', 'Démarreurs progressifs', null, null),
-('ISO-1009', 'Disjoncteur moteur 6–10 A', 'Départ moteur', 'Disjoncteurs moteur', null, null),
-('ISO-1010', 'Disjoncteur modulaire 3P 32 A courbe C', 'Distribution d’énergie', 'Disjoncteurs', null, 'Populaire'),
-('ISO-1011', 'Disjoncteur compact 160 A', 'Distribution d’énergie', 'Disjoncteurs', null, null),
-('ISO-1012', 'Coffret métallique 600 × 400 × 200 mm', 'Distribution d’énergie', 'Coffrets et armoires', null, 'Nouveau'),
-('ISO-1013', 'Interrupteur sectionneur 63 A', 'Distribution d’énergie', 'Sectionneurs', null, null),
-('ISO-1014', 'Bornier de jonction 4 mm²', 'Connectique et outillage', 'Borniers', null, null),
-('ISO-1015', 'Cosses à sertir isolées, lot de 100', 'Connectique et outillage', 'Cosses et embouts', null, null),
-('ISO-1016', 'Pince à sertir hydraulique', 'Connectique et outillage', 'Outillage', null, null),
-('ISO-1017', 'Projecteur LED 50 W IP65', 'Électricité bâtiment', 'Éclairage', null, null),
-('ISO-1018', 'Interrupteur différentiel 40 A 30 mA', 'Électricité bâtiment', 'Protection domestique', null, null),
-('ISO-1019', 'Câble souple 3G2,5 mm²', 'Câbles', 'Câbles de puissance', null, null),
-('ISO-1020', 'Câble blindé LIYCY 4 × 0,75 mm²', 'Câbles', 'Câbles blindés', null, null),
-('ISO-1021', 'Câble réseau FTP CAT6', 'Câbles', 'Câbles réseau', null, null),
-('ISO-1022', 'Vérin pneumatique ISO cylindrique', 'Pneumatique', 'Vérins', null, 'Populaire'),
-('ISO-1023', 'Électrovanne 2/2 voies 230 V', 'Pneumatique', 'Distributeurs et électrovannes', null, null),
-('ISO-1024', 'Raccord droit instantané', 'Pneumatique', 'Raccords et tubes', null, null),
-('ISO-1025', 'Filtre régulateur lubrificateur', 'Pneumatique', 'Traitement d’air', null, 'Nouveau'),
-('ISO-1026', 'Manomètre inox 0–10 bar', 'Mesure et régulation', 'Pression', null, null),
-('ISO-1027', 'Transmetteur de pression 4–20 mA', 'Mesure et régulation', 'Pression', null, null),
-('ISO-1028', 'Contrôleur de niveau à flotteur', 'Mesure et régulation', 'Niveau et débit', null, null),
-('ISO-1029', 'Sonde de température PT100', 'Mesure et régulation', 'Température', null, null)
+insert into public.products (ref, name, category, subcategory, price, is_new, is_popular) values
+('ISO-1001', 'Automate programmable compact 24 E/S', 'Automatisme et contrôle', 'Automates programmables', null, true, false),
+('ISO-1005', 'Alimentation 24 V DC 10 A', 'Automatisme et contrôle', 'Alimentations', null, true, false),
+('ISO-1006', 'Contacteur tripolaire 9 A, bobine 230 V AC', 'Départ moteur', 'Contacteurs', null, false, true),
+('ISO-1007', 'Variateur de vitesse triphasé 0,75 kW', 'Départ moteur', 'Variateurs de vitesse', null, false, true),
+('ISO-1010', 'Disjoncteur modulaire 3P 32 A courbe C', 'Distribution d’énergie', 'Disjoncteurs', null, false, true),
+('ISO-1012', 'Coffret métallique 600 × 400 × 200 mm', 'Distribution d’énergie', 'Coffrets et armoires', null, true, false),
+('ISO-1022', 'Vérin pneumatique ISO cylindrique', 'Pneumatique', 'Vérins', null, false, true),
+('ISO-1025', 'Filtre régulateur lubrificateur', 'Pneumatique', 'Traitement d’air', null, true, false)
 on conflict (ref) do nothing;

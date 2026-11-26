@@ -132,3 +132,5 @@ dialog::backdrop{background:rgba(15,28,51,.55)}
  .kv{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.hp{display:grid;gap:8px;font-size:14px;align-content:start}

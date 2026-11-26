@@ -1,0 +1,114 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    "api/page.js": {
+      "includeFiles": "{shell.html,data.js,common.js,config.js}"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api/page?type=h"
+    },
+    {
+      "source": "/boutique",
+      "destination": "/api/page?type=s"
+    },
+    {
+      "source": "/categorie/:cat",
+      "destination": "/api/page?type=c&cat=:cat"
+    },
+    {
+      "source": "/categorie/:cat/:sub",
+      "destination": "/api/page?type=c&cat=:cat&sub=:sub"
+    },
+    {
+      "source": "/produit/:slug",
+      "destination": "/api/page?type=p&slug=:slug"
+    },
+    {
+      "source": "/devis",
+      "destination": "/api/page?type=d"
+    },
+    {
+      "source": "/panier",
+      "destination": "/api/page?type=n&k=cart"
+    },
+    {
+      "source": "/commande",
+      "destination": "/api/page?type=n&k=checkout"
+    },
+    {
+      "source": "/recherche",
+      "destination": "/api/page?type=n&k=search"
+    },
+    {
+      "source": "/merci/:code",
+      "destination": "/api/page?type=n&k=done"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/page?type=sitemap"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/api/page?type=robots"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/admin",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/admin.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/shell.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ]
+}

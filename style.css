@@ -113,3 +113,9 @@ nav{display:none}nav.open{display:block;max-height:calc(100vh - 150px);max-heigh
 .grid>*{min-width:0}
 @media(max-width:1000px){.grid.sg{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.grid{gap:10px}.cb{padding:10px}.cb h3{font-size:14px;overflow-wrap:anywhere}.cb small{font-size:12px}.cb .btn{font-size:13px;padding:9px 6px}}
+
+/* Chargement du catalogue */
+.sk{height:300px;border-radius:10px;background:linear-gradient(90deg,#eceff5 25%,#f6f8fb 50%,#eceff5 75%);background-size:200% 100%;animation:sk 1.2s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.sk{animation:none}}
+@media(max-width:520px){.sk{height:240px}}

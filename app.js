@@ -42,17 +42,16 @@ const mail=(s,b)=>location.href='mailto:'+SHOP.mail+'?subject='+encodeURICompone
 
 /* ===== Supabase : catalogue, commandes, devis, visites ===== */
 let ready=false;
-async function loadProducts(){
- if(!window.sb)return;
- try{let all=[],from=0;
-  for(;;){const{data,error}=await sb.from('products').select('id,ref,name,category,subcategory,brand,description,price,image_url,is_new,is_popular').eq('visible',true).order('id').range(from,from+999);
-   if(error)throw error;all=all.concat(data);if(data.length<1000)break;from+=1000}
-  const out=[];
-  all.forEach(r=>{const c=C.findIndex(x=>x[0]==r.category);if(c<0)return;let s=C[c][1].indexOf(r.subcategory);if(s<0)s=0;
-   out.push({id:r.id,nr:r.name,n:esc(r.name),c,s,p:r.price!=null?+r.price:null,ref:esc(r.ref),refr:r.ref,img:r.image_url?esc(r.image_url):null,nw:r.is_new,pop:r.is_popular,t:r.is_new?'Nouveau':r.is_popular?'Populaire':null,brand:r.brand?esc(r.brand):'',desc:r.description?esc(r.description):''})});
-  P.length=0;P.push(...out);
- }catch(e){console.error('Catalogue Supabase indisponible, catalogue local utilisé',e)}
-}
+async function fetchRows(){
+ let all=[],from=0;
+ for(;;){const{data,error}=await sb.from('products').select('id,ref,name,category,subcategory,brand,description,price,image_url,is_new,is_popular').eq('visible',true).order('id').range(from,from+999);
+  if(error)throw error;all=all.concat(data);if(data.length<1000)break;from+=1000}
+ return all}
+function applyRows(all){
+ const out=[];
+ all.forEach(r=>{const c=C.findIndex(x=>x[0]==r.category);if(c<0)return;let s=C[c][1].indexOf(r.subcategory);if(s<0)s=0;
+  out.push({id:r.id,nr:r.name,n:esc(r.name),c,s,p:r.price!=null?+r.price:null,ref:esc(r.ref),refr:r.ref,img:r.image_url?esc(r.image_url):null,nw:r.is_new,pop:r.is_popular,t:r.is_new?'Nouveau':r.is_popular?'Populaire':null,brand:r.brand?esc(r.brand):'',desc:r.description?esc(r.description):''})});
+ P.length=0;P.push(...out)}
 const purge=()=>{Object.keys(cart).forEach(i=>{if(!G(i))delete cart[i]});save()};
 const lines=()=>Object.keys(cart).map(i=>({p:G(i),q:cart[i]})).filter(x=>x.p);
 const newCode=()=>'IP-'+Date.now().toString(36).toUpperCase().slice(-5)+Math.random().toString(36).slice(2,5).toUpperCase();
@@ -93,5 +92,17 @@ $('#sf').onsubmit=e=>{e.preventDefault();const v=$('#q').value.trim();if(v)locat
 $('#menu').addEventListener('click',e=>{const k=e.target.closest('#menu>li>a');if(k&&matchMedia('(max-width:820px)').matches&&k.parentElement.classList.contains('hs')){e.preventDefault();const li=k.parentElement,w=li.classList.contains('open');document.querySelectorAll('#menu>li.open').forEach(x=>x.classList.remove('open'));if(!w)li.classList.add('open')}});
 $('#mb').onclick=()=>$('#nav').classList.toggle('open');
 addEventListener('hashchange',route);menu();save();
-app.innerHTML='<div class="w"><div class="empty">Chargement du catalogue…</div></div>';
-loadProducts().finally(()=>{purge();ready=true;menu();save();route()});
+(function boot(){
+ let cached=null;try{cached=JSON.parse(localStorage.getItem('isoCat')||'null')}catch(e){}
+ const go=()=>{if(ready)return;purge();ready=true;menu();save();route()};
+ if(!window.sb){go();return}
+ if(cached){applyRows(cached);go()}
+ else{app.innerHTML='<div class="w"><div class="sec"><div class="grid">'+'<div class="sk"></div>'.repeat(8)+'</div></div></div>';setTimeout(go,4000)}
+ fetchRows().then(rows=>{
+  const j=JSON.stringify(rows);let old=null;try{old=localStorage.getItem('isoCat')}catch(e){}
+  try{localStorage.setItem('isoCat',j)}catch(e){}
+  applyRows(rows);purge();
+  if(!ready)go();
+  else if(j!==old&&!/^#\/(checkout|devis|done)/.test(location.hash)){window._keep=true;route();window._keep=false}
+ }).catch(e=>{console.error('Catalogue Supabase indisponible, catalogue local utilisé',e);go()});
+})();

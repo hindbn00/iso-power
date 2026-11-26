@@ -230,7 +230,7 @@ function productDlg(id){
   <label>Nom du produit<input name="name" required minlength="2" maxlength="200" value="${esc(p?p.name:'')}"></label>
   <div class="f2"><label>Prix en DA (facultatif)<input name="price" type="number" min="0" step="1" inputmode="numeric" value="${p&&p.price!=null?Number(p.price):''}"><span class="hint">Laisser vide = « Prix sur demande ».</span></label>
   <div class="hp"><b>Page d’accueil</b><label class="chk"><input type="checkbox" name="is_new" ${p&&p.is_new?'checked':''}> Afficher dans « Nouveautés »</label><label class="chk"><input type="checkbox" name="is_popular" ${p&&p.is_popular?'checked':''}> Afficher dans « Produits populaires »</label></div></div>
-  <label>Description (facultatif)<textarea name="description" rows="4" maxlength="3000">${esc(p?p.description:'')}</textarea></label>
+  <label>Description (facultatif)<textarea name="description" rows="4" maxlength="3000">${esc(p?p.description:'')}</textarea><span class="hint">Importante pour Google : marque, usage, caractéristiques (tension, puissance, dimensions…). Une description unique par produit est idéale.</span></label>
   <div><label>Photo<input type="file" id="pfile" accept="image/jpeg,image/png,image/webp"></label><div class="pv" style="margin-top:8px" id="pvw">${p&&p.image_url?`<img src="${esc(p.image_url)}" alt=""><button type="button" class="btn sm dng" id="prm">Retirer la photo</button>`:''}</div></div>
   <label class="chk"><input type="checkbox" name="visible" ${!p||p.visible?'checked':''}> Visible sur la boutique</label></div>
   <div class="df"><button type="button" class="btn" data-close>Annuler</button><button class="btn pri" id="psv">${p?'Enregistrer':'Ajouter le produit'}</button></div></form>`);

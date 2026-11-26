@@ -22,4 +22,4 @@ const P=[
 {ref:"ISO-1022",n:"Vérin pneumatique ISO cylindrique",c:6,s:0,t:"Populaire"},
 {ref:"ISO-1025",n:"Filtre régulateur lubrificateur",c:6,s:3,t:"Nouveau"}
 ];
-P.forEach((x,i)=>{x.id=i;x.ref=x.ref||'ISO-'+String(1001+i);x.p=x.p??null;x.nw=x.t=='Nouveau';x.pop=x.t=='Populaire'});
+P.forEach((x,i)=>{x.id=i;x.ref=x.ref||'ISO-'+String(1001+i);x.p=x.p??null;if(x.img&&!/^(https?:)?\/\//.test(x.img))x.img='/'+x.img.replace(/^\//,'');x.nw=x.t=='Nouveau';x.pop=x.t=='Populaire'});
